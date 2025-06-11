@@ -4,18 +4,17 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(24, 24, 24, 0.5); // lekko przyciemnione tło
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1;
 }
 
 .spinner {
   width: 64px;
   height: 64px;
   border: 8px solid #eee;
-  border-top: 8px solid #3498db; // kolor główny
+  border-top: 8px solid #3498db;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
