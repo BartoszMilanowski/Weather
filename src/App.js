@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Layout from './components/Layout/Layout';
 import WeatherBox from './components/WeatherBox/WeatherBox';
-import { useState, useEffect } from 'react';
+import Error from './components/common/Error';
+import Spinner from './components/common/Spinner/Spinner';
 
 function App() {
   const [location, setLocation] = useState(null);
@@ -46,6 +48,8 @@ function App() {
       try {
         const resp = await fetch(`${apiUrl}/current.json?key=${apiKey}&q=${location}&aqi=no`);
         const data = await resp.json();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         setWeatherConditions(data);
       } catch (error) {
         setError(error.message);
@@ -61,11 +65,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Layout location={weatherConditions?.location.name} />}>
-          <Route index element={<WeatherBox weatherConditions={weatherConditions} location={location} />} />
-        </Route>
-      </Routes>
+      {loading && <Spinner />}
+      {error && <Error message={error} />}
+      {!loading && !error && (
+        <Routes>
+          <Route path='/' element={<Layout location={weatherConditions?.location.name} />}>
+            <Route index element={<WeatherBox weatherConditions={weatherConditions} location={location} />} />
+          </Route>
+        </Routes>
+      )}
     </BrowserRouter>
   );
 }
