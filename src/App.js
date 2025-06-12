@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Layout from './components/Layout/Layout';
-import WeatherBox from './components/WeatherBox/WeatherBox';
 import Error from './components/common/Error';
 import Spinner from './components/common/Spinner/Spinner';
+import WeatherData from './components/WeatherData/WeatherData';
 
 function App() {
-  const [location, setLocation] = useState(null);
-  const [weatherConditions, setWeatherConditions] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [shownLocation, setShownLocation] = useState(null);
+  const [cityName, setCityName] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -23,7 +24,7 @@ function App() {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setLocation(`${latitude},${longitude}`)
+            setCurrentLocation(`${latitude},${longitude}`)
           },
 
           (error) => {
@@ -37,31 +38,11 @@ function App() {
       }
     }
     getLocation();
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!location) return;
-
-    const getCurrentWeather = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const resp = await fetch(`${apiUrl}/current.json?key=${apiKey}&q=${location}&aqi=no`);
-        const data = await resp.json();
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        setWeatherConditions(data);
-      } catch (error) {
-        setError(error.message);
-        console.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getCurrentWeather();
-
-  }, [location, apiKey, apiUrl])
+    setShownLocation(currentLocation);
+  }, [currentLocation]);
 
   return (
     <BrowserRouter>
@@ -69,8 +50,8 @@ function App() {
       {error && <Error message={error} />}
       {!loading && !error && (
         <Routes>
-          <Route path='/' element={<Layout location={weatherConditions?.location.name} />}>
-            <Route index element={<WeatherBox weatherConditions={weatherConditions} location={location} />} />
+          <Route path='/' element={<Layout location={cityName} />}>
+            <Route index element={<WeatherData location={shownLocation} setLoading={setLoading} setError={setError} apiUrl={apiUrl} apiKey={apiKey} setCityName={setCityName} />} />
           </Route>
         </Routes>
       )}
