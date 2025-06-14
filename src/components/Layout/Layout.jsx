@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import './Layout.scss'
 
-const Layout = ({ location }) => {
+const Layout = ({ location, lastUpdate }) => {
 
     return (
         <div className="container">
@@ -9,6 +9,9 @@ const Layout = ({ location }) => {
                 <h2>{location}</h2>
             </div>
             <Outlet />
+            <div className="layout-bottom">
+                <span className="last-update">Ostatania aktualizacja: {lastUpdate}</span>
+            </div>
         </div>
     )
 }

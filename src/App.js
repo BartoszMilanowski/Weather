@@ -1,5 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setCurrentLocation,
+  setError,
+  setLoading,
+  setCityName,
+  setLastUpdate
+} from './store/weatherSlice';
 import './App.css';
 import Layout from './components/Layout/Layout';
 import Error from './components/common/Error';
@@ -7,16 +15,15 @@ import Spinner from './components/common/Spinner/Spinner';
 import WeatherData from './components/WeatherData/WeatherData';
 
 function App() {
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const [shownLocation, setShownLocation] = useState(null);
-  const [cityName, setCityName] = useState(null);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const apiKey = process.env.REACT_APP_API_KEY;
+  const dispatch = useDispatch();
+  const {
+    currentLocation,
+    cityName,
+    lastUpdate,
+    loading,
+    error
+  } = useSelector((state) => state.weather);
 
   useEffect(() => {
     const getLocation = () => {
@@ -24,37 +31,39 @@ function App() {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setCurrentLocation(`${latitude},${longitude}`)
+            dispatch(setCurrentLocation(`${latitude},${longitude}`));
           },
 
           (error) => {
-            setError('Nie udało się pobrać lokalizacji')
+            dispatch(setError('Twoja przeglądarka nie obsługuje geolokalizacji'));
             console.error(error);
           }
         );
       } else {
-        setError('Twoja przeglądarka nie obsługuje geolokalizacji')
+        dispatch(setError('Twoja przeglądarka nie obsługuje geolokalizacji'));
         console.error("Your browser don't show location");
       }
     }
     getLocation();
-  }, []);
+  }, [dispatch]);
 
-  useEffect(() => {
-    setShownLocation(currentLocation);
-  }, [currentLocation]);
 
   return (
     <BrowserRouter>
       {loading && <Spinner />}
-      {error && <Error message={error} />}
-      {!loading && !error && (
+      {error && <Error message={error} />}     
         <Routes>
-          <Route path='/' element={<Layout location={cityName} />}>
-            <Route index element={<WeatherData location={shownLocation} setLoading={setLoading} setError={setError} apiUrl={apiUrl} apiKey={apiKey} setCityName={setCityName} />} />
+          <Route path='/' element={<Layout
+            location={cityName}
+            lastUpdate={lastUpdate}
+          />}>
+            <Route index element={<WeatherData
+              location={currentLocation}
+              setError={(v) => dispatch(setError)}
+              setCityName={(v) => dispatch(setCityName)}
+              setLastUpdate={(v) => dispatch(setLastUpdate)} />} />
           </Route>
         </Routes>
-      )}
     </BrowserRouter>
   );
 }
