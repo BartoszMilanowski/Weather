@@ -18,7 +18,6 @@ const WeatherBox = ({ weatherConditions, current }) => {
             <div className='details'>
                 {current ? (<span className='press'>Ciśnienie: {weatherConditions?.pressure_mb} hPa</span>) : <span></span>}
                 <span className='wind'>Wiatr{current ? '' : ' maksymalny'}: {wind} km/h</span>
-                <span><a href={`/forecast/hourly`}>Prognoza godzinowa</a></span>
             </div>
         </div>
     )

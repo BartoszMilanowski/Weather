@@ -1,60 +1,28 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import {
-    setError,
-    setCityName,
-    setLastUpdate,
-    setWeatherConditions
-} from '../../store/weatherSlice';
+
+import { useSelector } from 'react-redux';
 import WeatherBox from '../WeatherBox/WeatherBox';
-import fetchCurrentWeather from "../../api/weather";
 import './WeatherData.scss';
-import Spinner from '../common/Spinner/Spinner';
+import { useEffect, useState } from 'react';
 
 
-const WeatherData = ({ location }) => {
+const WeatherData = () => {
 
     const [currentConditions, setCurrentConditions] = useState(null);
     const [secondDayForecast, setSecondDayForecast] = useState(null);
     const [thirdDayForecast, setThirdDayForecast] = useState(null);
-    const [loading, setLoading] = useState(false)
 
-    const dispatch = useDispatch();
+    const { weatherConditions } = useSelector((state) => state.weather);
+
+    console.log('weatherCondition', weatherConditions);
 
     useEffect(() => {
+        setCurrentConditions(weatherConditions?.current);
+        setSecondDayForecast(weatherConditions?.forecast?.forecastday[1]);
+        setThirdDayForecast(weatherConditions?.forecast?.forecastday[2]);
+    },[weatherConditions])
 
-        if (!location) return;
 
-        const controller = new AbortController();
-
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const resp = await fetchCurrentWeather({ location, signal: controller.signal });
-
-                dispatch(setWeatherConditions(resp));
-                setCurrentConditions(resp.current);
-                setSecondDayForecast(resp.forecast?.forecastday[1]);
-                setThirdDayForecast(resp.forecast?.forecastday[2]);
-
-                dispatch(setCityName(resp.location.name));
-                dispatch(setLastUpdate(resp.current.last_updated));
-            } catch (error) {
-                if (error.name !== 'AbortError') {
-                    dispatch(setError(error.message));
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-
-        return () => {
-            controller.abort()
-        }
-
-    }, [location, dispatch])
+    console.log('current', currentConditions)
 
     const todayDate = new Date().toLocaleDateString('pl-Pl');
     let tomorrowDate = new Date();
@@ -66,29 +34,23 @@ const WeatherData = ({ location }) => {
 
     return (
         <>
-            {loading && <Spinner />}
-            {currentConditions && secondDayForecast && thirdDayForecast ? (
-                <>
-                    <div className="day-data">
-                        <h4>Teraz ({todayDate})</h4>
-                        <WeatherBox weatherConditions={currentConditions} current={true} />
-                    </div>
-                    <div className="day-data">
-                        <h4>Jutro ({tomorrowDate})</h4>
-                        <WeatherBox weatherConditions={secondDayForecast} current={false} />
-                    </div>
-                    <div className="day-data">
-                        <h4>Pojutrze ({dayAfterDate})</h4>
-                        <WeatherBox weatherConditions={thirdDayForecast} current={false} />
-                    </div>
-                </>
-            ) : !loading && (
-                <p>brak danynch</p>
-            )}
+            <div className="day-data">
+                <h4>Teraz ({todayDate})</h4>
+                <WeatherBox weatherConditions={currentConditions} current={true} />
+            </div>
+            <div className="day-data">
+                <h4>Jutro ({tomorrowDate})</h4>
+                <WeatherBox weatherConditions={secondDayForecast} current={false} />
+            </div>
+            <div className="day-data">
+                <h4>Pojutrze ({dayAfterDate})</h4>
+                <WeatherBox weatherConditions={thirdDayForecast} current={false} />
+            </div>
 
         </>
     )
 }
+
 
 
 export default WeatherData;

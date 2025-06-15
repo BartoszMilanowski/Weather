@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  setCurrentLocation,
   setError,
-  setCityName,
-  setLastUpdate
+  setWeatherConditions
 } from './store/weatherSlice';
 import './App.css';
 import Layout from './components/Layout/Layout';
@@ -13,6 +11,7 @@ import Error from './components/common/Error';
 import WeatherData from './components/WeatherData/WeatherData';
 import getCurrentLocation from './api/currentLoacation';
 import Spinner from './components/common/Spinner/Spinner';
+import fetchWeatherData from './api/weather';
 
 function App() {
 
@@ -26,27 +25,26 @@ function App() {
     error
   } = useSelector((state) => state.weather);
 
-
-
   useEffect(() => {
-    const fetchLocation = async () => {
 
-      if (!navigator.geolocation) {
-        dispatch(setError('Twoja przeglądarka nie obsługuje geolokalizacji'));
-        return;
-      }
-
+    const fetchData = async () => {
       try {
         setLoading(true);
+
         const { latitude, longitude } = await getCurrentLocation();
-        dispatch(setCurrentLocation(`${latitude},${longitude}`));
+        const locationString = `${latitude},${longitude}`;
+
+        console.log(locationString);
+
+        const resp = await fetchWeatherData(locationString);
+        dispatch(setWeatherConditions(resp));
       } catch (error) {
-        dispatch(setError('Twoja przeglądarka nie obsługuje geolokalizacji'))
+        dispatch(setError(error.message));
       } finally {
         setLoading(false);
       }
     }
-    fetchLocation();
+    fetchData();
   }, [dispatch]);
 
 
@@ -59,16 +57,8 @@ function App() {
           location={cityName}
           lastUpdate={lastUpdate}
         />}>
-          <Route index element={
-            currentLocation ? (
-            <WeatherData
-            location={currentLocation}
-            setError={(v) => dispatch(setError)}
-            setCityName={(v) => dispatch(setCityName)}
-            setLastUpdate={(v) => dispatch(setLastUpdate)} />
-          ) : !error ? (
-            <Spinner />
-          ) : null } />
+          <Route index
+          element={<WeatherData />} />
         </Route>
       </Routes>
     </BrowserRouter>

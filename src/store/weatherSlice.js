@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     currentLocation: null,
-    weatherCondition: null,
+    weatherConditions: null,
     cityName: null,
     lastUpdate: null,
     error: null
@@ -16,7 +16,7 @@ const weatherSlice = createSlice({
             state.currentLocation = action.payload;
         },
         setWeatherConditions(state, action){
-            state.weatherCondition = action.payload;
+            state.weatherConditions = action.payload;
         },
         setCityName(state, action) {
             state.cityName = action.payload;
