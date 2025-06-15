@@ -34,8 +34,6 @@ function App() {
         const { latitude, longitude } = await getCurrentLocation();
         const locationString = `${latitude},${longitude}`;
 
-        console.log(locationString);
-
         const resp = await fetchWeatherData(locationString);
         dispatch(setWeatherConditions(resp));
       } catch (error) {

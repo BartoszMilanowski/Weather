@@ -3,6 +3,8 @@ import './Layout.scss'
 
 const Layout = ({ location, lastUpdate }) => {
 
+    
+
     return (
         <div className="container">
             <div className="layout-top">

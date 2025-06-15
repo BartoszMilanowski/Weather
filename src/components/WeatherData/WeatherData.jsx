@@ -13,16 +13,11 @@ const WeatherData = () => {
 
     const { weatherConditions } = useSelector((state) => state.weather);
 
-    console.log('weatherCondition', weatherConditions);
-
     useEffect(() => {
         setCurrentConditions(weatherConditions?.current);
         setSecondDayForecast(weatherConditions?.forecast?.forecastday[1]);
         setThirdDayForecast(weatherConditions?.forecast?.forecastday[2]);
     },[weatherConditions])
-
-
-    console.log('current', currentConditions)
 
     const todayDate = new Date().toLocaleDateString('pl-Pl');
     let tomorrowDate = new Date();
