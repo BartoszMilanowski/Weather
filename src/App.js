@@ -18,12 +18,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const {
-    currentLocation,
-    cityName,
-    lastUpdate,
-    error
-  } = useSelector((state) => state.weather);
+  const { error } = useSelector((state) => state.weather);
 
   useEffect(() => {
 
@@ -51,12 +46,8 @@ function App() {
       {loading && <Spinner />}
       {error && <Error message={error} />}
       <Routes>
-        <Route path='/' element={<Layout
-          location={cityName}
-          lastUpdate={lastUpdate}
-        />}>
-          <Route index
-          element={<WeatherData />} />
+        <Route path='/' element={<Layout />}>
+          <Route index element={<WeatherData />} />
         </Route>
       </Routes>
     </BrowserRouter>
