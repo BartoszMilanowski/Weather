@@ -43,8 +43,16 @@ $main-color: white;
   .container {
     .layout-top {
       margin-left: 10%;
+      padding-left: 15%;
       h2 {
         font-size: 2em;
+      }
+    }
+
+    .layout-bottom{
+      padding-right: 5%;
+      span{
+        font-size: .8em;
       }
     }
   }
@@ -54,11 +62,11 @@ $main-color: white;
   .container {
     .layout-top {
       margin-left: 0;
-      padding-left: 0.5em;
+      padding-left: 5%;
       h2 {
         font-size: 1.3em;
       }
     }
-
+  
   }
 }
