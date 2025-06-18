@@ -18,7 +18,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const { selectLocation, error } = useSelector((state) => state.weather);
+  const { selectLocation, error, refresh } = useSelector((state) => state.weather);
 
   useEffect(() => {
 
@@ -44,7 +44,7 @@ function App() {
       }
     }
     fetchData();
-  }, [dispatch, selectLocation]);
+  }, [dispatch, selectLocation, refresh]);
 
 
   return (

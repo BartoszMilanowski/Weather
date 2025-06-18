@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { setSelectLocation } from "../../store/weatherSlice";
+import { setSelectLocation, toggleRefresh } from "../../store/weatherSlice";
 import { useDispatch } from "react-redux";
 import './Topbar.scss';
 
@@ -8,10 +8,18 @@ const Topbar = () => {
     const [location, setLocation] = useState('');
     const dispatch = useDispatch();
 
+    const handleResetLocation = () => {
+        dispatch(setSelectLocation(null));
+    }
+
+    const handleRefresh = () => {
+        dispatch(toggleRefresh());
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(location.trim() !== ''){
+        if (location.trim() !== '') {
             dispatch(setSelectLocation(location));
             setLocation('');
         }
@@ -28,6 +36,12 @@ const Topbar = () => {
                     onChange={(e) => setLocation(e.target.value)}
                 />
                 <button type="submit">Zmień</button>
+                <button type="button" onClick={handleResetLocation}>
+                    Użyj bieżącej lokalizacji
+                </button>
+                <button type="button" onClick={handleRefresh}>
+                    Odśwież dane
+                </button>
             </form>
         </div>
     )

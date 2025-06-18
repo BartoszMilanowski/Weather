@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     selectLocation: null,
     weatherConditions: null,
-    error: null
+    error: null,
+    refresh: false
 };
 
 const weatherSlice = createSlice({
@@ -20,13 +21,17 @@ const weatherSlice = createSlice({
             state.error = action.payload
             state.loading = false;
         },
+        toggleRefresh(state) {
+            state.refresh = !state.refresh;
+        }
     },
 });
 
 export const {
     setSelectLocation,
     setWeatherConditions,
-    setError
+    setError,
+    toggleRefresh
 } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

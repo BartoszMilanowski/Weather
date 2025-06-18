@@ -30,10 +30,37 @@
             background: transparent;
             cursor: pointer;
             transition: transform .2s;
+            margin-right: .5em;
 
             &:hover {
+                background-color: blue;
                 transform: scale(1.2);
             }
         }
+    }
+}
+
+@media (max-width: 900px){
+    .topbar{
+       flex-direction: column; 
+       height: auto;
+       padding-bottom: .5em;
+       padding-left: 15%;
+       width: 100%;
+
+       .location-form{
+        display: flex;
+        flex-direction: column;
+
+        label{
+            margin-bottom: .5em;
+        }
+
+        input{
+            margin-bottom: .5em;
+            width: 100%;
+        }
+
+       }
     }
 }
