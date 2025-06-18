@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { setSelectLocation } from "../../store/weatherSlice";
 import { useDispatch } from "react-redux";
+import './Topbar.scss';
 
 const Topbar = () => {
 

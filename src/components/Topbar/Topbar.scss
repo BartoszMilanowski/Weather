@@ -1,0 +1,39 @@
+.topbar {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 2.5em;
+    justify-content: flex-end;
+    margin-bottom: .8em;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: auto;
+
+    .location-form {
+        padding-top: .5em;
+        padding-right: 17%;
+        color: white;
+
+        label {
+            margin-right: .8em;
+        }
+
+        input {
+            border: none;
+            border-radius: 5px;
+            margin-right: .8em;
+        }
+
+        button {
+            color: white;
+            border-color: white;
+            border-radius: 5px;
+            background: transparent;
+            cursor: pointer;
+            transition: transform .2s;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+    }
+}
