@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    currentLocation: null,
+    selectLocation: null,
     weatherConditions: null,
-    cityName: null,
-    lastUpdate: null,
     error: null
 };
 
@@ -12,17 +10,11 @@ const weatherSlice = createSlice({
     name: 'weather',
     initialState,
     reducers: {
-        setCurrentLocation(state, action) {
-            state.currentLocation = action.payload;
+        setSelectLocation(state, action) {
+            state.selectLocation = action.payload;
         },
         setWeatherConditions(state, action){
             state.weatherConditions = action.payload;
-        },
-        setCityName(state, action) {
-            state.cityName = action.payload;
-        },
-        setLastUpdate(state, action) {
-            state.lastUpdate = action.payload;
         },
         setError(state, action) {
             state.error = action.payload
@@ -32,10 +24,8 @@ const weatherSlice = createSlice({
 });
 
 export const {
-    setCurrentLocation,
+    setSelectLocation,
     setWeatherConditions,
-    setCityName,
-    setLastUpdate,
     setError
 } = weatherSlice.actions;
 

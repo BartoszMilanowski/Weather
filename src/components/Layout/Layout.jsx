@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import './Layout.scss'
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Topbar from "../Topbar/Topbar";
 
 const Layout = () => {
 
@@ -17,6 +18,7 @@ const Layout = () => {
 
     return (
         <div className="container">
+            <Topbar />
             <div className="layout-top">
                 <h2>{location}</h2>
             </div>

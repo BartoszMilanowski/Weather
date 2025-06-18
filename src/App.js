@@ -9,7 +9,7 @@ import './App.css';
 import Layout from './components/Layout/Layout';
 import Error from './components/common/Error';
 import WeatherData from './components/WeatherData/WeatherData';
-import getCurrentLocation from './api/currentLoacation';
+import getCurrentLocation from './api/currentLocation';
 import Spinner from './components/common/Spinner/Spinner';
 import fetchWeatherData from './api/weather';
 
@@ -18,16 +18,22 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.weather);
+  const { selectLocation, error } = useSelector((state) => state.weather);
 
   useEffect(() => {
 
     const fetchData = async () => {
       try {
         setLoading(true);
+        dispatch(setError(null))
+        let locationString;
 
-        const { latitude, longitude } = await getCurrentLocation();
-        const locationString = `${latitude},${longitude}`;
+        if (selectLocation) {
+          locationString = selectLocation;
+        } else {
+          const { latitude, longitude } = await getCurrentLocation();
+          locationString = `${latitude},${longitude}`;
+        }
 
         const resp = await fetchWeatherData(locationString);
         dispatch(setWeatherConditions(resp));
@@ -38,7 +44,7 @@ function App() {
       }
     }
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, selectLocation]);
 
 
   return (
